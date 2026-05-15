@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .nav { background: #333; padding: 10px; margin: -20px -20px 20px -20px; }
+        .nav a { color: #fff; text-decoration: none; padding: 10px 15px; display: inline-block; }
+        .nav a:hover { background: #555; }
+        table { width: 100%; border-collapse: collapse; background: #fff; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f0f0f0; }
+        .btn { display: inline-block; padding: 8px 16px; text-decoration: none; border-radius: 4px; }
+        .btn-primary { background: #0066cc; color: #fff; }
+        .btn-primary:hover { background: #0052a3; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Dashboard</a>
+        <a href="/devices">Devices</a>
+        <a href="/employees">Employees</a>
+        <a href="/borrowings">Borrowings</a>
+        <a href="/maintenance">Maintenance</a>
+    </div>
+    <h1>Employees</h1>
+    <a href="/employees/create" class="btn btn-primary">Add Employee</a>
+    <br><br>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="emp : ${employees}">
+                <td th:text="${emp.id}">1</td>
+                <td th:text="${emp.employeeName}">Jane Smith</td>
+                <td th:text="${emp.department}">IT</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(employees)}">
+                <td colspan="3" style="text-align:center;color:#999;">No employees registered yet.</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
