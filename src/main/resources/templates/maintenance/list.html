@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Maintenance Records</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .nav { background: #333; padding: 10px; margin: -20px -20px 20px -20px; }
+        .nav a { color: #fff; text-decoration: none; padding: 10px 15px; display: inline-block; }
+        .nav a:hover { background: #555; }
+        table { width: 100%; border-collapse: collapse; background: #fff; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f0f0f0; }
+        .btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; }
+        .btn-primary { background: #0066cc; color: #fff; text-decoration: none; display: inline-block; }
+        .btn-primary:hover { background: #0052a3; }
+        .btn-success { background: #28a745; color: #fff; }
+        .btn-success:hover { background: #218838; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-warning:hover { background: #e0a800; }
+        .status-in-progress { color: orange; font-weight: bold; }
+        .status-repaired { color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Dashboard</a>
+        <a href="/devices">Devices</a>
+        <a href="/employees">Employees</a>
+        <a href="/borrowings">Borrowings</a>
+        <a href="/maintenance">Maintenance</a>
+    </div>
+    <h1>Maintenance Records</h1>
+    <a href="/maintenance/create" class="btn btn-primary">Log Maintenance</a>
+    <br><br>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Device</th>
+                <th>Issue</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="m : ${maintenanceRecords}">
+                <td th:text="${m.id}">1</td>
+                <td th:text="${m.deviceName}">Printer</td>
+                <td th:text="${m.issueDescription}">Paper jam</td>
+                <td>
+                    <span th:text="${m.repairStatus}"
+                          th:classappend="${m.repairStatus == 'Repaired'} ? 'status-repaired' : 'status-in-progress'">In Progress</span>
+                </td>
+                <td>
+                    <form th:if="${m.repairStatus != 'Repaired'}" th:action="@{/maintenance/update-status/{id}(id=${m.id})}" method="post" style="display:inline;">
+                        <input type="hidden" name="repairStatus" value="Repaired">
+                        <button type="submit" class="btn btn-success">Mark Repaired</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(maintenanceRecords)}">
+                <td colspan="5" style="text-align:center;color:#999;">No maintenance records yet.</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
